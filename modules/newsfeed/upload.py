@@ -3,7 +3,7 @@ import json
 
 from flask import Blueprint
 from status import Status
-from modules.newsfeed.composed import file_upload, extract_feeds
+from modules.newsfeed.composed import file_upload, extract_feeds, get_page
 from util.exceptions import FileNotFoundException, FileNotSelectedException
 from util.helpers import construct_response_message
 
@@ -76,6 +76,14 @@ def fetch_all_feeds():
     except FileNotFoundException as e:
         message = construct_response_message(error_message=e.error_message)
         return json.dumps(message), Status.HTTP_404_NOT_FOUND
+
+
+@nw.route('/newsfeed/paginate', methods=["GET"])
+def pagination():
+    pages, number = get_page(3)
+    message = construct_response_message(pages=pages,
+                                         number=number)
+    return json.dumps(message), Status.HTTP_200_OK
 
 
 @nw.route('/newsfeed/<filename>',)

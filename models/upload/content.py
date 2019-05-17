@@ -26,6 +26,11 @@ class Content(database.Model):
         feeds = Content.query.all()
         return feeds
 
+    @staticmethod
+    def paginate_files(page_num: int):
+        files = Content.query.paginate(page=page_num ,per_page=2)
+        return files
+
 
 
 

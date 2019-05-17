@@ -68,3 +68,36 @@ def extract_feeds() -> List:
     else:
         raise FileNotFoundException("File not Found")
 
+def extract_pages(pages) -> List:
+    if pages is not None:
+        data = []
+        for page in pages.items:
+            page_note = Dictnote(
+                image_name=page.image_name,
+                image_path=page.image_path,
+                description=page.description,
+            )
+            data.append(page_note)
+        return data
+    else:
+        raise FileNotFoundException("File not Found")
+
+
+def extract_page_num(pages) -> List:
+    num = 1
+    data = []
+    for page_num in pages.iter_pages():
+        if page_num:
+            data.append(num)
+        else:
+            data.append(None)
+        num += 1
+
+    return data
+
+
+def get_page(page_num):
+    pages = Content.paginate_files(page_num)
+    page = extract_pages(pages)
+    number = extract_page_num(pages)
+    return page, number

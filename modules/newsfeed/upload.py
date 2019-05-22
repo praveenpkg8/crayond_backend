@@ -80,6 +80,30 @@ def fetch_all_feeds():
 
 @nw.route('/newsfeed/paginate', methods=["GET"])
 def pagination():
+    """
+        Endpoint for fetching the details of a pagination.
+
+        This endpoint must be such that it has to provide params for queryong the page.
+
+
+        ---
+        parameters:
+            -   name: Query Params
+                in: params
+                required: true
+                schema:
+                    type: string
+                description: page number for getting respective page.
+
+
+
+        responses:
+            200:
+                description: Returns the details feed.
+            404:
+                description: feed page not found
+
+        """
     pages, number = get_page()
     message = construct_response_message(pages=pages,
                                          number=number)
@@ -88,6 +112,28 @@ def pagination():
 
 @nw.route('/feed/like', methods=['PUT'])
 def increase_like():
+    """
+
+        Endpoint for increasing like count.
+
+                ---
+
+                requestBody:
+                    description: Increasing like
+                    required: true
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    id:
+                                        type: string
+                                        required: true
+
+                responses:
+                    200:
+                        description: Returns like count.
+        """
     like_count = push_like()
     message = construct_response_message(like_count=like_count)
     return json.dumps(message), Status.HTTP_200_OK
@@ -95,6 +141,28 @@ def increase_like():
 
 @nw.route('/feed/like-count', methods=['PUT'])
 def fetch_like_count():
+    """
+
+            Endpoint for increasing like count.
+
+                    ---
+
+                    requestBody:
+                        description: Increasing like
+                        required: true
+                        content:
+                            application/json:
+                                schema:
+                                    type: object
+                                    properties:
+                                        id:
+                                            type: string
+                                            required: true
+
+                    responses:
+                        200:
+                            description: Returns like count.
+            """
     like = like_count()
     message = construct_response_message(like=like)
     return json.dumps(message), Status.HTTP_200_OK

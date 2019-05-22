@@ -3,7 +3,7 @@ import json
 
 from flask import Blueprint
 from status import Status
-from modules.newsfeed.composed import file_upload, extract_feeds, get_page
+from modules.newsfeed.composed import file_upload, extract_feeds, get_page, push_like, like_count
 from util.exceptions import FileNotFoundException, FileNotSelectedException
 from util.helpers import construct_response_message
 
@@ -80,15 +80,21 @@ def fetch_all_feeds():
 
 @nw.route('/newsfeed/paginate', methods=["GET"])
 def pagination():
-    pages, number = get_page(3)
+    pages, number = get_page()
     message = construct_response_message(pages=pages,
                                          number=number)
     return json.dumps(message), Status.HTTP_200_OK
 
 
-@nw.route('/newsfeed/<filename>',)
-def uploaded_file(filename):
-    return
-    # return send_from_directory(,
-    #                            filename)
+@nw.route('/feed/like', methods=['PUT'])
+def increase_like():
+    like_count = push_like()
+    message = construct_response_message(like_count=like_count)
+    return json.dumps(message), Status.HTTP_200_OK
 
+
+@nw.route('/feed/like-count', methods=['PUT'])
+def fetch_like_count():
+    like = like_count()
+    message = construct_response_message(like=like)
+    return json.dumps(message), Status.HTTP_200_OK
